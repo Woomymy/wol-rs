@@ -1,4 +1,4 @@
-use std::{str::FromStr, string::ParseError};
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq)]
 pub enum MacParseError {
