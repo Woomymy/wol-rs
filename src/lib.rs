@@ -58,4 +58,12 @@ mod tests {
             [0xFF; 6]
         )
     }
+    #[test]
+    /// Test conversion from Str works
+    pub fn test_from_str() {
+        assert_eq!(
+            Mac::new((0xAF, 0xBF, 0xCF, 0xDF, 0xEF, 0xFF)),
+            "AF:BF:CF:DF:EF:FF".parse::<Mac>().unwrap()
+        )
+    }
 }
