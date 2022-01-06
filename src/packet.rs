@@ -1,6 +1,6 @@
+use super::Mac;
 use std::net::SocketAddr;
 
-use super::Mac;
 pub fn make_packet(mac: &Mac) -> Result<Vec<u8>, std::io::Error> {
     let macbytes = mac.as_bytes();
     let mut packet = vec![0xFF; 6];
@@ -19,16 +19,20 @@ pub fn make_packet(mac: &Mac) -> Result<Vec<u8>, std::io::Error> {
     Ok(packet)
 }
 
-pub fn send_packet(packet: &[u8]) -> Result<(), std::io::Error> {
+pub fn send_packet(packet: &[u8], address: Option<SocketAddr>) -> Result<(), std::io::Error> {
     let socket = std::net::UdpSocket::bind("0.0.0.0:0")?;
     socket.set_broadcast(true)?;
 
-    socket.send_to(
-        packet,
-        "255.255.255.255:9"
+    let addr;
+    if let Some(a) = address {
+        addr = a;
+    } else {
+        addr = "255.255.255.255:9"
             .parse::<SocketAddr>()
-            .expect("Can't parse destination SocketAddr!"),
-    )?;
+            .expect("Can't parse destination socketaddr!");
+    }
+
+    socket.send_to(packet, addr)?;
     Ok(())
 }
 
