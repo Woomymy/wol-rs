@@ -38,7 +38,9 @@ pub fn send_packet(packet: &[u8], address: Option<SocketAddr>) -> Result<(), std
 
 #[cfg(test)]
 mod tests {
-    use crate::packet::make_packet;
+    use std::net::SocketAddr;
+
+    use crate::packet::{make_packet, send_packet};
 
     #[test]
     pub fn test_make_packet() {
@@ -49,5 +51,16 @@ mod tests {
         assert_eq!(make_packet(&mac).unwrap().len(), 102);
         // Test if packet correctly constructed
         assert_eq!(make_packet(&mac).unwrap(), vec![0xFF; 102]);
+    }
+
+    #[test]
+    /// Tests send_packet by sending packet to loopback
+    pub fn test_send_packet() {
+        let packet = make_packet(&super::Mac::new((0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF))).unwrap();
+        assert!(send_packet(
+            &packet[0..102],
+            Some("127.0.0.1:9".parse::<SocketAddr>().unwrap())
+        )
+        .is_ok())
     }
 }
