@@ -12,8 +12,8 @@ impl From<std::io::Error> for Error {
 impl From<MacParseError> for Error {
     fn from(e: MacParseError) -> Self {
         match e {
-            MacParseError::InvalidInput => Self(format!("Invalid mac address!")),
-            MacParseError::InvalidLenght => Self(format!("Invalid mac address length!")),
+            MacParseError::InvalidInput => Self("Invalid mac address!".to_string()),
+            MacParseError::InvalidLenght => Self("Invalid mac address length!".to_string()),
         }
     }
 }
