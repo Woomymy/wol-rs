@@ -18,6 +18,6 @@ macro_rules! info {
 /// Prints an debug info, in yellow
 macro_rules! debug {
     ($($arg:tt)*) => {
-        println!("{}", format!("\x1B[1;93m{}\x1b[0;m", format!($($arg)*)))
+        println!("{}", format!("\x1B[1;93m[{}:{}:{}] {}\x1b[0;m", file!(), line!(), column!(), format!($($arg)*)))
     };
 }
