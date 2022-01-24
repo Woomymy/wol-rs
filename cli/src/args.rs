@@ -10,6 +10,6 @@ pub struct Args {
     #[argh(option, short = 'm')]
     pub mac: Option<String>,
     /// host to wake up
-    #[argh(option, short='h')]
+    #[argh(option, short = 'h')]
     pub host: Option<String>,
 }
