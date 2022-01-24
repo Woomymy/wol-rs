@@ -2,7 +2,7 @@ use std::fs::read_to_string;
 use super::errors::Error;
 use super::{debug,error};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Config {
     hosts: Vec<(String, String)>
 }
@@ -54,5 +54,29 @@ impl Config {
             return Some((h.0.clone(), h.1.clone()));
         }
         None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Config;
+    #[test]
+    /// Test if config parses correctly
+    pub fn test_config_parse_single_line() {
+        assert_eq!(Config::parse_config("host pc = 90:1b:0e:53:92:de".to_string()).unwrap(), Config {
+            hosts: vec![
+                ("pc".to_string(), "90:1b:0e:53:92:de".to_string())
+            ]
+        })
+    }
+    /// Test if multiple lines config loading works correctly
+    #[test]
+    pub fn test_config_parse_multiple_lines() {
+        assert_eq!(Config::parse_config("host pc = FF:FF:FF:FF:FF:FF\nhost other = EE:EE:EE:EE:EE:EE".to_string()).unwrap(), Config {
+            hosts: vec![
+                ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string()),
+                ("other".to_string(), "EE:EE:EE:EE:EE:EE".to_string())
+            ]
+        })
     }
 }
