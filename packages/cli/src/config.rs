@@ -25,7 +25,7 @@ impl Config {
         for line in lines.lines() {
             if line.is_empty() { continue };
             debug!("Parsing config line {line}");
-            let parts: Vec<&str> = line.split(' ').collect();
+            let parts: Vec<&str> = line.split_whitespace().collect();
             debug!("Found parts: {:#?}", &parts);
 
             if parts.len() < 4 {
@@ -76,6 +76,15 @@ mod tests {
             hosts: vec![
                 ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string()),
                 ("other".to_string(), "EE:EE:EE:EE:EE:EE".to_string())
+            ]
+        })
+    }
+    /// Test if config test is ok with       spaces
+    #[test]
+    pub fn test_config_parse_spaces() {
+        assert_eq!(Config::parse_config("host    pc =          FF:FF:FF:FF:FF:FF            \n".to_string()).unwrap(), Config {
+            hosts: vec![
+                ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string())
             ]
         })
     }
