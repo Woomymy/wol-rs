@@ -1,0 +1,8 @@
+[package]
+name = "wolrs-common"
+description = "Common lib for CLI/GUI"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+libwol-rs = { path = "../libwol-rs" }

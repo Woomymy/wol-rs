@@ -5,4 +5,5 @@ edition = "2021"
 
 [dependencies]
 argh = "0.1.7"
-libwol-rs = { path = "../lib" }
+libwol-rs = { path = "../libs/libwol-rs" }
+wolrs-common = { path = "../libs/wolrs-common" }
