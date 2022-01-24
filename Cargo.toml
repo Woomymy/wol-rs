@@ -1,6 +1,8 @@
 [package]
-name = "libwol-rs"
+name = "wolrs"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+argh = "0.1.7"
+libwol-rs = { path = "packages/lib" }
