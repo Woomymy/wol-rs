@@ -15,7 +15,7 @@ impl Config {
             return Ok(Self { hosts: Vec::new() });
         }
         let configlines = read_to_string(&configpath)?;
-        return Config::parse_config(configlines);
+        Config::parse_config(configlines)
     }
     /// Get information from config lines
     pub fn parse_config(lines: String) -> Result<Self, Error> {
@@ -121,6 +121,23 @@ mod tests {
             Config::parse_config("host \"pc\" = \"FF:FF:FF:FF:FF:FF\"".to_string()).unwrap(),
             Config {
                 hosts: vec![("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string())]
+            }
+        )
+    }
+    /// Test if invalid lines are skipped
+    #[test]
+    pub fn test_skip_invalid_lines() {
+        assert_eq!(
+            Config::parse_config(
+                "host pc = FF:FF:FF:FF:FF:FF\nhost inv alid\nhost nm = EE:EE:EE:EE:EE:EE"
+                    .to_string()
+            )
+            .unwrap(),
+            Config {
+                hosts: vec![
+                    ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string()),
+                    ("nm".to_string(), "EE:EE:EE:EE:EE:EE".to_string())
+                ]
             }
         )
     }
