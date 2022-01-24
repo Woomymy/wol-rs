@@ -16,8 +16,15 @@ macro_rules! info {
 
 #[macro_export]
 /// Prints an debug info, in yellow
+#[cfg(debug_assertions)]
 macro_rules! debug {
     ($($arg:tt)*) => {
         println!("{}", format!("\x1B[1;93m[{}:{}:{}] {}\x1b[0;m", file!(), line!(), column!(), format!($($arg)*)))
     };
+}
+
+#[macro_export]
+#[cfg(not(debug_assertions))]
+macro_rules! debug {
+    ($($arg:tt)*) => {};
 }

@@ -1,21 +1,19 @@
 mod args;
 use args::Args;
-use wolrs_common::{error,debug,info,config::Config, errors::Error};
 use libwol_rs::{
     packet::{make_packet, send_packet},
     Mac,
 };
+use wolrs_common::{config::Config, debug, error, errors::Error, info};
 
 fn main() -> Result<(), Error> {
     let args: Args = argh::from_env();
 
-    if args.verbose {
-        debug!(
-            "wol-rs-{} v{}",
-            env!("CARGO_PKG_NAME"),
-            env!("CARGO_PKG_VERSION")
-        );
-    }
+    debug!(
+        "wol-rs-{} v{}",
+        env!("CARGO_PKG_NAME"),
+        env!("CARGO_PKG_VERSION")
+    );
 
     let config = Config::from_machine()?;
 
@@ -38,16 +36,12 @@ fn main() -> Result<(), Error> {
     }
 
     let dest_mac = mac.parse::<Mac>()?;
-    if args.verbose {
-        debug!("Dest Mac address: {:#?}", &dest_mac);
-    }
+    debug!("Dest Mac address: {:#?}", &dest_mac);
     info!("Sending packet to host {}", &mac);
     // Generate packet to send
     let packet = make_packet(&dest_mac)?;
-    if args.verbose {
-        debug!("Packet to send: {:#?}", &packet);
-        debug!("Packet len: {}", packet.len())
-    }
+    debug!("Packet to send: {:#?}", &packet);
+    debug!("Packet len: {}", packet.len());
     // Broadcast packet
     send_packet(&packet[0..102], None)?;
 
