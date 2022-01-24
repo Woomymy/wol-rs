@@ -8,5 +8,8 @@ pub struct Args {
     pub verbose: bool,
     /// mac address of host to wake up
     #[argh(option, short = 'm')]
-    pub mac: String,
+    pub mac: Option<String>,
+    /// host to wake up
+    #[argh(option, short='h')]
+    pub host: Option<String>,
 }
