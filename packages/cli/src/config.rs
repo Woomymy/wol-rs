@@ -34,8 +34,8 @@ impl Config {
             }
             match parts[0] {
                 "host" => {
-                    let name = parts[1].to_string();
-                    let mac = parts[3..].join(" ").replace('"', "").trim().to_string();
+                    let name = parts[1].replace("'", "").replace('"', "").to_string();
+                    let mac = parts[3..].join(" ").replace('"', "").replace("'", "").trim().to_string();
                     debug!("Got host {name} mac {mac}");
                     configuration.hosts.push((name, mac))
                 }
@@ -83,6 +83,24 @@ mod tests {
     #[test]
     pub fn test_config_parse_spaces() {
         assert_eq!(Config::parse_config("host    pc =          FF:FF:FF:FF:FF:FF            \n".to_string()).unwrap(), Config {
+            hosts: vec![
+                ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string())
+            ]
+        })
+    }
+    /// Test if " " and '' are removed
+    #[test]
+    pub fn test_config_remove_single_quotes() {
+        assert_eq!(Config::parse_config("host 'pc' = 'FF:FF:FF:FF:FF:FF'".to_string()).unwrap(), Config {
+            hosts: vec![
+                ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string())
+            ]
+        })
+    }
+    /// Test if " " and '' are removed
+    #[test]
+    pub fn test_config_remove_double_quotes() {
+        assert_eq!(Config::parse_config("host \"pc\" = \"FF:FF:FF:FF:FF:FF\"".to_string()).unwrap(), Config {
             hosts: vec![
                 ("pc".to_string(), "FF:FF:FF:FF:FF:FF".to_string())
             ]
