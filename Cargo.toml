@@ -1,2 +1,2 @@
 [workspace]
-members = ["cli", "libs/libwol-rs", "libs/wolrs-common"]
+members = ["cli", "gui", "libs/libwol-rs", "libs/wolrs-common"]

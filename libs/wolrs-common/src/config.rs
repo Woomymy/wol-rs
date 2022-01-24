@@ -63,6 +63,10 @@ impl Config {
         }
         None
     }
+    /// Return all hosts
+    pub fn get_hosts(&self) -> Vec<(String, String)> {
+        self.hosts.clone()
+    }
 }
 
 #[cfg(test)]
