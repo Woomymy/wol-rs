@@ -27,7 +27,10 @@ impl Config {
             debug!("Parsing config line {line}");
             let parts: Vec<&str> = line.split_whitespace().collect();
             debug!("Found parts: {:#?}", &parts);
-
+            // Skip comments
+            if line.starts_with("#") {
+                continue;
+            }
             if parts.len() < 4 {
                 error!("Invalid config line {line}");
                 continue;
