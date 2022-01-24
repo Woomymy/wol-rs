@@ -1,6 +1,8 @@
 mod args;
 use args::Args;
 mod errors;
+mod config;
+use config::Config;
 use libwol_rs::{
     packet::{make_packet, send_packet},
     Mac,
@@ -18,11 +20,31 @@ fn main() -> Result<(), errors::Error> {
         );
     }
 
-    let dest_mac = args.mac.parse::<Mac>()?;
+    let config = Config::from_machine()?;
+
+    debug!("{:#?}", config);
+
+    let mac: String;
+    if let Some(macaddr) = args.mac {
+        mac = macaddr;
+    } else if let Some(host) = args.host {
+        debug!("Host to wake: {host}");
+        if let Some(host) = config.find_host(host.clone()) {
+            mac = host.1;
+        } else {
+            error!("Host {host} not found!");
+            std::process::exit(0);
+        }
+    } else {
+        error!("No host/mac specified!");
+        std::process::exit(0);
+    }
+
+    let dest_mac = mac.parse::<Mac>()?;
     if args.verbose {
         debug!("Dest Mac address: {:#?}", &dest_mac);
     }
-    info!("Sending packet to host {}", args.mac);
+    info!("Sending packet to host {}", &mac);
     // Generate packet to send
     let packet = make_packet(&dest_mac)?;
     if args.verbose {
