@@ -1,15 +1,12 @@
 mod args;
 use args::Args;
-mod errors;
-mod config;
-use config::Config;
+use wolrs_common::{error,debug,info,config::Config, errors::Error};
 use libwol_rs::{
     packet::{make_packet, send_packet},
     Mac,
 };
-#[macro_use]
-mod log;
-fn main() -> Result<(), errors::Error> {
+
+fn main() -> Result<(), Error> {
     let args: Args = argh::from_env();
 
     if args.verbose {
